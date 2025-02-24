@@ -1,0 +1,40 @@
+server:
+  #设置端口号
+  port: 8081 #默认端口是8080
+spring:
+  datasource:
+    #数据库用户名
+    username: root
+    #数据库用户密码
+    password: 123456
+    #serverTimezone=UTC 解决市区的报错 一般mysql是8.0以上的是必须配置这个
+    #userUnicode=true&characterEncoding=utf-8 指定字符编码、解码格式
+    url: jdbc:mysql://localhost:3306/metest?serverTimezone=UTC&userUnicode=true&characterEncoding=utf-8
+    #设置驱动类
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+        initial-size: 5  # 初始化连接数
+        min-idle: 5  # 最小空闲连接数
+        max-active: 20  # 最大活跃连接数
+        max-wait: 60000  # 获取连接的最大等待时间
+        time-between-eviction-runs-millis: 60000  # 连接回收器运行的间隔时间
+        min-evictable-idle-time-millis: 300000  # 连接在池中最小的空闲时间
+        validation-query: SELECT 1  # 用于验证连接是否有效的 SQL 查询
+        test-while-idle: true  # 空闲时是否进行连接有效性检查
+        test-on-borrow: false  # 从连接池获取连接时是否进行有效性检查
+        test-on-return: false  # 归还连接到连接池时是否进行有效性检查
+        pool-prepared-statements: true  # 是否开启预编译语句池
+    #配置监控统计拦截的filters，stat:监控统计、log4j：日志记录、wall：防御sql注入
+    #如果允许时报错  java.lang.ClassNotFoundException: org.apache.log4j.Priority
+    #则导入 log4j 依赖即可，Maven 地址：https://mvnrepository.com/artifact/log4j/log4j
+    filters: stat,wall,log4j
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+
+# 配置mybatis
+mybatis:
+  #指定pojo扫描包位置让mybatis自动扫描到指定义的pojo包下
+  type-aliases-package: com.geeks.website.pojo
+  #指定位置扫描Mapper接口对应的XML文件 classpath:xml文件位置
+  mapper-locations: classpath:mapper/*.xml
